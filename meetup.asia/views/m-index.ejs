@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Majid</title>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/white.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/mobile.css">
+
+</head>
+<body>
+    <div class="all">
+        <canvas id="canvas"></canvas>
+        <div class="container">
+            <div class="col1">
+                <video id="remoteStream" autoplay playsinline loop>
+                    <!--  <source src="/stylesheets/noise1.mp4" type="video/mp4">  media="(max-width: 640px)">-->
+
+                </video>
+                <div class="toturial">
+                    <lottie-player class="lp_tutorial" src="https://assets1.lottiefiles.com/private_files/lf30_uwlaovzb.json" background="transparent" speed="1" hidden loop autoplay></lottie-player>
+                    <P>Welcome to mobile Meetup.asia. We can help you to connect with people around the world and have a free video chat with them. Just click on New Chat and have fun!</P>
+                </div>
+                <lottie-player id="lp_loading" background="transparent" speed="1" class="lp_loading" hidden loop autoplay></lottie-player>
+
+            </div>
+            <div class="col2">
+                <video id="selfstream" autoplay muted playsinline></video>
+            </div>
+
+        </div>
+        <div class="row2">
+            <div id="messenger">
+                <textarea id="textarea" placeholder="Type to chat..."></textarea>
+                <div id="chat"></div>
+
+            </div>
+            <button id="nextbtn" class="buttons button-42 " style="background-image: linear-gradient(-180deg, green,green );">New Chat</button>
+            <button id="stopbtn" class="buttons button-42 ">Stop</button>
+        </div>
+
+    </div>
+
+    <!----------------------------------------------------------social-->
+    <div class="social">
+        <a href="#">
+            <div class="social-btn color-telegram">
+                <div class="icons8-telegram-app"></div>
+                <p class="order-1 google-font margin-telgram">Telegram</p>
+            </div>
+        </a>
+        <a href="#">
+            <div class="social-btn color-instagram">
+                <div class="icons8-instagram"></div>
+                <p class="order-1 google-font margin-instagram">instagram</p>
+            </div>
+        </a>
+        <a href="#">
+            <div class="social-btn color-whatsapp">
+                <div class="icons8-whatsapp"></div>
+                <p class="order-1 google-font margin-instagram">whats app</p>
+            </div>
+        </a>
+    </div>
+
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
+    <script type="module" src="/javascripts/main.js"></script>
+    <script type="module" src="/javascripts/anime.es.js"></script>
+    <script type="module" src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+
+</body>
+</html>

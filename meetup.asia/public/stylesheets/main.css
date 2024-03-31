@@ -1,0 +1,83 @@
+body {
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    background-color: black;
+}
+
+a {
+    color: #00B7FF;
+}
+
+#remoteStream {
+    height:100%;
+    width:100%;
+    position: absolute;
+    margin:auto;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+#selfstream {
+    display: block;
+    width: 25%;
+    top: 0;
+    right: 0;
+    margin: 1vh;
+    border: solid 0.1vh white;
+    border-radius: 0.5vh;
+    position: absolute;
+    opacity:0.7;
+}
+#nextbtn {
+    opacity:0.3;
+    background-color:gray;
+
+    min-height: fit-content;
+    min-width: fit-content;
+    height:15vh;
+    color: white;
+    border: solid 0.1vh white;
+    border-radius: 40%;
+    position: absolute;
+    bottom: 0;
+    right: 50%;
+    transform: translate( +50%,-10%);
+}
+#nextbtn:hover{
+    opacity:0.7;
+    cursor:pointer;
+}
+
+#chat {
+    height: 50vh;
+    width:95%;
+    margin-bottom: 0px;
+    position: relative;
+    top:0px;
+    overflow-y: auto;
+    overflow-wrap:break-word;
+    scroll-behavior:smooth;
+
+}
+
+#textarea {
+    width: 95%;
+    position: relative;
+    bottom: 0px;
+    opacity: 0.7;
+}
+.p{
+}
+.sender{
+    color:blue;
+
+}
+.reciever{
+    color:red;
+}
+#messenger {
+    position: absolute;
+    bottom:0;
+    right:0;
+    width: 25%;
+}

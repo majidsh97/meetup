@@ -1,0 +1,172 @@
+//npm install --production
+//alias myproject='cd /var/www/html/meetup.asia'
+//unalias myproject
+//alias meetup = 'cd /var/www/html/meetup.asia'
+//du -h -s
+/*Remember that aliases are not persistent,
+which means they will be lost when you close your terminal session.
+If you want to make an alias permanent, you can add it to your shell's configuration file
+(e.g., ~/.bashrc or ~/.zshrc), so that it's loaded every time you start a new terminal session. */
+
+// sudo systemctl restart nginx
+//ps aux | grep node
+//sudo kill -9 $(sudo lsof -t -i:3000)
+//sudo rm -rf /tmp/.com.google.*
+//https://pfertyk.me/2020/03/webrtc-a-working-example/
+//https://socket.io/docs/v3/server-socket-instance/
+//conn.query('insert into socket (sid) values (%s);', [socket.id], (err:Error, res:OkPacket) => {
+//
+
+import { exec } from 'child_process';
+import * as express from 'express';
+import { AddressInfo } from "net";
+import * as path from 'path';
+import vhost from 'vhost';
+import { mysql_user, conn } from './sql';
+import { Server } from 'socket.io'
+import { promisify, inspect } from 'util'
+//const http = require('http');
+
+import routes from './routes/index';
+import users from './routes/user';
+import { OkPacket } from 'mysql';
+
+
+
+
+function var_dump(x: any) {
+    console.log("--------------------------------");
+    console.log(inspect(x));
+    console.log("--------------------------------")
+
+}
+
+
+const debug = require('debug')('my express app');
+const app = express();
+//const httpserver = http.createServer(app);
+/*
+const io = new Server({
+    cors: {
+        origin: "https://meetup.asia",
+        methods: ["GET", "POST"]
+    }
+});
+*/
+
+//app.use(adminJs.options.rootPath, adminJs.router)
+
+
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+console.log(path.join(__dirname, 'public'))
+app.use(express.static(path.join(__dirname, 'public')));
+
+
+
+app.use('/', routes);
+app.use('/users', users);
+
+
+
+
+
+// catch 404 and forward to error handler
+app.use((req, res, next) => {
+
+    const err = new Error('Not Found');
+    console.log('404');
+    err['status'] = 404;
+    next(err);
+});
+
+// error handlers
+
+// development error handler
+// will print stacktrace
+if (app.get('env') === 'development') {
+    app.use((err, req, res, next) => { // eslint-disable-line @typescript-eslint/no-unused-vars
+        res.status(err['status'] || 500);
+        res.render('error', {
+            message: err.message,
+            error: err
+        });
+    });
+}
+
+// production error handler
+// no stacktraces leaked to user
+app.use((err, req, res, next) => { // eslint-disable-line @typescript-eslint/no-unused-vars
+    res.status(err.status || 500);
+    res.render('error', {
+        message: err.message,
+        error: {}
+    });
+});
+
+app.set('port', 3000);
+
+
+//equire('http').createServer(app);
+
+//function insres(err: Error, res: OkPacket){}
+const server = app.listen(app.get('port'), function () {
+    console.log('app listen on ' + app.get('port'))
+    debug('Express server listening on port ${(server.address() as AddressInfo).port}');
+});
+
+let io = new Server({ cors: { origin: '*' } });
+conn.query('delete from socket where 1;', [], (err, res) => { });
+io.on('connection', (socket) => {
+    console.log(socket.id + 'connected');
+    //var_dump(socket);
+
+
+
+    //s->c->j->ready
+    conn.query('select id,sid,room from socket where room is null limit 1;', [], (err, res: any[]) => {
+        if (err) throw err;
+        console.log(res.length)
+        if (res.length == 0) {
+            conn.query("insert into socket (sid) values (?) ;", [socket.id], (err, res) => {
+                if (err) throw err;
+                socket.join(res.insertId.toString());
+               
+
+            });
+
+        }
+        else {
+            conn.query('update socket set room=? where id=?;', [socket.id, res[0].id], err => { if (err) throw err; });
+            socket.to(res[0].id).emit('ready');
+        }
+    });
+
+    socket.on('data', (data) => {
+        var_dump(data);
+        conn.query('select id from socket where ? in (sid,room);', [socket.id], (err, res: any[]) => {
+
+            socket.to(res[0].id).emit('data', data)
+
+        });
+    });
+    socket.on('disconnect', () => {
+        conn.query('delete from socket where ? in (sid,room);', [socket.id], (err,res) => {
+            if (err) throw err;
+            socket.leave(res.insertId.toString());
+
+        });
+    });
+
+});
+const ioport = 8880;
+io.listen(ioport)
+console.log('io listen on:' + ioport)
+
+
+/*
+httpserver.listen(3000, () => {
+    console.log('listening on *:3000');
+});
+*/
